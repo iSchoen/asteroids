@@ -1,6 +1,7 @@
 import sys
 import pygame
-from constants import SCREEN_WIDTH, SCREEN_HEIGHT, BLACK
+import random
+from constants import SCREEN_WIDTH, SCREEN_HEIGHT, ASTEROID_MIN_RADIUS, BLACK
 from player import Player
 from asteroid import Asteroid
 from asteroidfield import AsteroidField
@@ -49,6 +50,20 @@ def main():
                 if(shot.collidesWith(asteroid)):
                     shot.kill()
                     asteroid.kill()
+                    if asteroid.radius >= ASTEROID_MIN_RADIUS:
+                        random_angle = random.uniform(20, 50)
+
+                        first_rotation = asteroid.velocity.rotate(random_angle)
+                        second_rotation = asteroid.velocity.rotate(-random_angle)
+
+                        new_radius = asteroid.radius - ASTEROID_MIN_RADIUS
+
+                        first_new_asteroid = Asteroid(asteroid.position.x, asteroid.position.y, new_radius)
+                        second_new_asteroid = Asteroid(asteroid.position.x, asteroid.position.y, new_radius)
+
+                        first_new_asteroid.velocity = first_rotation * 1.2
+                        second_new_asteroid.velocity = second_rotation * 1.2
+
 
         for drawable in drawables:
             drawable.draw(screen)
